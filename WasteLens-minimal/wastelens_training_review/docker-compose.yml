@@ -1,0 +1,14 @@
+services:
+  wastelens:
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+    volumes:
+      - wastelens-data:/app/server/data
+    restart: unless-stopped
+
+volumes:
+  wastelens-data:
