@@ -1,155 +1,304 @@
-# ♻️ WasteLens
-### AI-Powered Waste Recognition and Recycling Guidance
+♻️ WasteLens
 
-WasteLens is an environmental technology platform designed to make waste sorting easier, improve recycling decisions, and reduce contamination. By combining image recognition, material classification, and disposal guidance, WasteLens helps users make more informed decisions about everyday waste.
+AI-Powered Waste Recognition, Material Classification & Recycling Guidance
 
-## 🌎 The Problem
+<p align="center">
+  **Making smarter waste decisions easier, one item at a time.**
+</p>
 
-Recycling contamination is a major environmental challenge. Many people are unsure how to properly dispose of everyday materials, which can lead to recyclable materials being thrown away or incorrectly sorted.
+WasteLens is an environmental technology project that aims to improve waste sorting through computer vision, machine learning, and accessible disposal guidance. The platform is designed to help users identify everyday waste materials, understand how they may be disposed of, and make more informed environmental decisions.
 
-WasteLens aims to address this problem by making waste identification and disposal guidance more accessible.
+⸻
 
-## 💡 Our Solution
+🌎 The Problem
 
-WasteLens combines computer vision, user feedback, and environmental data to create a platform for smarter waste management.
+Improper waste sorting and recycling contamination are persistent environmental challenges. Many people are unsure whether an item belongs in recycling, compost, regular trash, or a special disposal program.
 
-Users can:
-- Upload an image or use their camera to identify waste.
-- Receive predicted material classifications.
-- Review confidence scores and alternative predictions.
-- Correct inaccurate classifications.
-- Access a searchable waste disposal guide.
-- View local disposal guidance.
-- Track classification activity and dataset statistics.
+This uncertainty can result in recyclable materials being discarded, contaminated recycling streams, and unnecessary waste.
 
-## ✨ Features
+Existing disposal information can also be difficult to navigate because recycling requirements vary between municipalities.
 
-### AI Waste Recognition
-- Image-based material recognition.
-- Confidence scores and alternative predictions.
-- Support for custom machine-learning models.
-- Human verification and correction.
+💡 The Solution
 
-### Waste Disposal Guide
-- Searchable material database.
-- Recycling, compost, trash, and special-disposal guidance.
-- Customizable local disposal rules.
-- Source information for locally verified guidance.
+WasteLens combines image-based material recognition with a searchable disposal guide and customizable local waste rules.
 
-### Dataset and Model Development
-- Image dataset collection.
-- Human-labeled classification data.
-- Duplicate detection and dataset auditing.
-- Training, validation, and testing splits.
-- Model evaluation and comparison.
-- Performance tracking.
+Rather than treating every item as having the same disposal requirements, WasteLens separates two important tasks:
 
-### Community and Environmental Impact
-- Classification history.
-- Real-world testing feedback.
-- Waste classification statistics.
-- Exportable data for further analysis.
+1. Material recognition: Identifying what an item is made of or what type of waste it represents.
+2. Disposal guidance: Determining how that material should be handled under applicable local rules.
 
-## 🛠️ Technology Stack
+This separation is important because identifying plastic, glass, or food waste does not automatically determine whether an item is accepted by a particular recycling program.
 
-| Technology | Purpose |
-|---|---|
-| React | User interface |
-| Vite | Frontend development |
-| JavaScript | Application logic |
-| Node.js | Backend runtime |
-| Express | Backend API |
-| TensorFlow.js | Browser-based machine learning |
-| Python / TensorFlow | Custom model training pipeline |
-| IndexedDB / Local Storage | Local data persistence |
+⸻
 
-## 🚀 Getting Started
+✨ Features
 
-### Requirements
-- Node.js and npm
-- Python for the model-training pipeline
+1. AI Waste Recognition
 
-### Installation
+* Image-based waste identification.
+* Camera capture and image uploads.
+* Classification confidence scores.
+* Alternative classification predictions.
+* Human verification and correction of predictions.
+* Support for integrating custom machine-learning models.
+
+2. Waste Disposal Guide
+
+* Searchable material reference guide.
+* Recycling, compost, trash, and special-disposal categories.
+* Material preparation recommendations.
+* Customizable local disposal guidance.
+* Source information for locally verified disposal rules.
+
+3. Dataset Management
+
+* Collection of labeled waste images.
+* Human-verified classification corrections.
+* Dataset organization and auditing.
+* Duplicate image detection.
+* Training, validation, and testing dataset preparation.
+* Dataset export for machine-learning development.
+
+4. Model Development and Evaluation
+
+* Custom image classification training pipeline.
+* Model evaluation and comparison tools.
+* Classification accuracy and per-category performance analysis.
+* Confusion matrix reporting.
+* Real-world testing and feedback collection.
+
+5. User Feedback and Analytics
+
+* Classification history.
+* Prediction verification and corrections.
+* Model performance tracking.
+* Exportable feedback and evaluation data.
+* Classification statistics.
+
+⸻
+
+🧠 Machine Learning Approach
+
+WasteLens is being developed toward a dedicated waste-material recognition model.
+
+The development process is designed to include:
+
+1. Obtain appropriately licensed waste-image datasets.
+2. Standardize material categories and labels.
+3. Identify duplicates and inconsistent labels.
+4. Divide images into training, validation, and testing groups.
+5. Train a custom image classification model.
+6. Evaluate the model using unseen test data.
+7. Analyze errors across individual material categories.
+8. Integrate the trained model into the WasteLens application.
+
+Dataset Development
+
+One potential source is the RealWaste dataset, which contains 4,752 images across nine waste-material categories.
+
+Dataset inclusion requires reviewing its license, category definitions, and compatibility with the WasteLens classification system.
+
+The material categories will not automatically be treated as disposal categories. Local recycling rules must be considered separately.
+
+Model Evaluation
+
+Model performance will be assessed using:
+
+* Accuracy
+* Precision
+* Recall
+* F1-score
+* Confusion matrices
+* Per-category performance
+* Real-world testing results
+
+Important: A custom waste-specific model is still under development. General-purpose image recognition predictions should not be represented as a fully trained WasteLens model. No custom model accuracy is claimed until training and independent evaluation have been completed.
+
+⸻
+
+🛠️ Technology Stack
+
+Technology	Purpose
+React	Frontend interface
+Vite	Frontend development environment
+JavaScript	Application functionality
+Node.js	Backend runtime
+Express.js	Backend API
+TensorFlow.js	Browser-based machine learning integration
+Python	Machine-learning development
+TensorFlow	Custom model training
+IndexedDB	Local image dataset storage
+Local Storage	User preferences and local application data
+
+⸻
+
+🏗️ Project Architecture
+
+WasteLens is organized around four main components:
+
+WasteLens
+│
+├── Frontend
+│   ├── Image Recognition
+│   ├── Camera and Upload
+│   ├── Waste Guide
+│   ├── Dataset Management
+│   └── Analytics
+│
+├── Backend
+│   ├── API
+│   ├── Data Management
+│   └── Application Services
+│
+├── Machine Learning
+│   ├── Dataset Preparation
+│   ├── Model Training
+│   ├── Model Evaluation
+│   └── Model Integration
+│
+└── Documentation
+    ├── Setup Instructions
+    ├── Development Notes
+    └── Testing and Evaluation
+
+⸻
+
+🚀 Getting Started
+
+Prerequisites
+
+* Node.js
+* npm
+* Python for machine-learning development
+
+Installation
 
 Clone the repository:
 
-```bash
-git clone YOUR_REPOSITORY_URL
+git clone https://github.com/dagmawi1-lang/WasteLens.git
 cd WasteLens
-```
+
+The application source is organized inside the project directory. Navigate to the directory containing the frontend package.json before installing dependencies.
 
 Install dependencies:
 
-```bash
 npm install
-```
 
-Start the development server:
+Start the development server using the script defined in that directory’s package.json.
 
-```bash
 npm run dev
-```
 
-Open the local URL provided by Vite in your browser.
+The terminal will display the local development URL.
 
-### Backend
+Note: Backend and machine-learning setup may require additional dependencies and environment configuration.
 
-Follow the backend setup instructions in the `server` directory and the project's environment configuration.
+⸻
 
-## 🧠 Machine Learning Development
+🔐 Privacy and Data Handling
 
-WasteLens is being developed toward a custom waste-material recognition model.
+WasteLens is being developed with user control and responsible data handling in mind.
 
-The planned training process includes:
+Important considerations include:
 
-1. Collecting publicly available waste-image datasets.
-2. Reviewing dataset licenses and classification labels.
-3. Cleaning and organizing image data.
-4. Removing duplicate images.
-5. Creating training, validation, and testing sets.
-6. Training a custom image classification model.
-7. Evaluating performance across material categories.
-8. Integrating the trained model into WasteLens.
+* User control over image collection.
+* Human consent before contributing images to a dataset.
+* Separating classification feedback from image storage.
+* Avoiding unnecessary collection of personal information.
+* Reviewing dataset permissions before redistribution.
 
-**Current development note:** The custom waste-specific model is still under development. Existing general-purpose image recognition should not be interpreted as a fully trained waste-classification model.
+⸻
 
-## 📊 Future Development
+🌱 Environmental Impact
 
-Planned improvements include:
+WasteLens aims to contribute to better waste management by making material identification and disposal information easier to access.
 
-- More accurate waste-material recognition.
-- Expanded material categories.
-- Improved recognition under different lighting and backgrounds.
-- Better local recycling guidance.
-- Larger and more diverse training datasets.
-- Improved environmental impact measurements.
-- Expanded community participation and feedback.
+Potential impact will be evaluated through measurable indicators:
 
-## 🌱 Environmental Impact
+Metric	What it measures
+Classification accuracy	How often material predictions are correct
+Correction rate	How frequently users correct predictions
+Per-category F1-score	Classification performance across materials
+Contamination reduction	Changes in incorrectly sorted materials
+Dataset diversity	Representation of different materials and conditions
+Guidance reliability	Accuracy of disposal recommendations against local sources
 
-WasteLens is designed to support more responsible waste management by helping users understand what materials they are disposing of and how those materials may be handled.
+These measurements will help determine whether WasteLens provides meaningful improvements rather than relying on estimated environmental benefits.
 
-Potential impact will be evaluated through:
-- Classification accuracy.
-- Reduction in incorrect disposal recommendations.
-- User correction rates.
-- Material identification performance.
-- Dataset diversity and reliability.
+⸻
 
-## 🔐 Privacy
+🗺️ Development Roadmap
 
-WasteLens is designed with privacy in mind. Image processing and data collection features are designed to provide user control over submitted information. Review the application's current settings and documentation for the exact data handling behavior.
+* [x]	Initial application concept and architecture
+* [x]	Image recognition interface
+* [x]	Waste disposal reference guide
+* [x]	Customizable disposal guidance
+* [x]	Human classification verification
+* [x]	Dataset management tools
+* [x]	Model training and evaluation infrastructure
+* [ ]	Complete licensed training dataset collection
+* [ ]	Train and evaluate a custom waste-specific model
+* [ ]	Integrate the trained model into the application
+* [ ]	Conduct broader real-world testing
+* [ ]	Improve recognition across different lighting and backgrounds
+* [ ]	Expand verified local disposal guidance
+* [ ]	Measure real-world environmental impact
 
-## 👨‍💻 Project Status
+⸻
 
-**Active Development**
+⚠️ Limitations
 
-WasteLens is an evolving environmental technology project. Features, machine-learning capabilities, and performance will continue to improve as development and testing progress.
+WasteLens is an active development project.
 
-## 📜 License
+* Image classification predictions may be incorrect.
+* Confidence scores do not guarantee correctness.
+* Material recognition does not independently establish local recyclability.
+* Disposal recommendations depend on the accuracy and currency of local guidance.
+* The custom waste-specific model requires completed training and independent evaluation before its performance can be established.
 
-Add your chosen open-source license before publishing. Review the licenses of all third-party datasets, libraries, and other materials used in the project separately.
+Users should verify important disposal decisions with their local waste-management authority.
 
----
+⸻
 
-**WasteLens: Making smarter waste decisions easier, one item at a time.**
+🤝 Contributing
+
+Contributions and suggestions are welcome.
+
+Potential areas for improvement include:
+
+* Waste-image datasets.
+* Computer vision and machine learning.
+* Classification accuracy.
+* Local recycling information.
+* User interface improvements.
+* Environmental impact measurement.
+
+Before contributing third-party images or datasets, ensure that their licenses permit the intended use.
+
+⸻
+
+📜 License
+
+This project is licensed under the MIT License.
+
+See the LICENSE file for details.
+
+Third-party datasets, images, and dependencies may have separate licensing requirements.
+
+⸻
+
+👨‍💻 Project Information
+
+Project: WasteLens
+Category: Environmental Technology / Artificial Intelligence / Computer Vision
+Status: Active Development
+Repository: github.com/dagmawi1-lang/WasteLens
+
+⸻
+
+<p align="center">
+
+WasteLens
+
+Recognize materials. Improve decisions. Reduce waste.
+
+</p>
