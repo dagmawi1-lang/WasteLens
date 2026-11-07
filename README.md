@@ -193,7 +193,7 @@ Fixed a template-string bug that broke `npm run build`, reordered the page so th
 
 ## License
 
-[MIT](LICENSE) © 2026 Dagmawi Melaku
+**Permission required.** © 2026 Dagmawi Melaku. You need my written permission before using, copying, or modifying this code, and any approved use must credit me with a link to this repository. Viewing, forking on GitHub, and running it to judge or review a submission are allowed without asking. To ask, [open an issue](../../issues/new). See [LICENSE](LICENSE) for the full terms.
 
 ## Earlier versions
 
