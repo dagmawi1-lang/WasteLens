@@ -1,0 +1,16 @@
+node_modules/
+dist/
+server/data/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+
+# Training data and outputs (large / license-restricted)
+data/
+training_output/
+*.pth
+*.keras
+wastelens_tfjs_model/
+__pycache__/

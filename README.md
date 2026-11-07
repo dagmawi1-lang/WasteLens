@@ -1,304 +1,200 @@
-♻️ WasteLens
+# WasteLens
 
-AI-Powered Waste Recognition, Material Classification & Recycling Guidance
+WasteLens is a hackathon project for Arbiter Hacks V1's **Rethinking Waste** track. It uses browser-based computer vision, disposal reasoning, user verification, and a lightweight backend to help people make better waste-sorting decisions.
 
-<p align="center">
-  **Making smarter waste decisions easier, one item at a time.**
-</p>
+## Why it fits the theme
 
-WasteLens is an environmental technology project that aims to improve waste sorting through computer vision, machine learning, and accessible disposal guidance. The platform is designed to help users identify everyday waste materials, understand how they may be disposed of, and make more informed environmental decisions.
+The primary purpose is waste sorting. The app analyzes an item, maps likely objects to disposal streams, explains preparation guidance, flags uncertainty, and lets a person correct the recommendation.
 
-⸻
+## Current architecture
 
-🌎 The Problem
+- React + Vite frontend
+- TensorFlow.js + MobileNet browser vision model
+- Node + Express API
+- Local JSON development datastore
+- Browser local history
+- Camera capture support
+- Confidence + human verification flow
+- Security headers and input validation
 
-Improper waste sorting and recycling contamination are persistent environmental challenges. Many people are unsure whether an item belongs in recycling, compost, regular trash, or a special disposal program.
+## Run locally
 
-This uncertainty can result in recyclable materials being discarded, contaminated recycling streams, and unnecessary waste.
-
-Existing disposal information can also be difficult to navigate because recycling requirements vary between municipalities.
-
-💡 The Solution
-
-WasteLens combines image-based material recognition with a searchable disposal guide and customizable local waste rules.
-
-Rather than treating every item as having the same disposal requirements, WasteLens separates two important tasks:
-
-1. Material recognition: Identifying what an item is made of or what type of waste it represents.
-2. Disposal guidance: Determining how that material should be handled under applicable local rules.
-
-This separation is important because identifying plastic, glass, or food waste does not automatically determine whether an item is accepted by a particular recycling program.
-
-⸻
-
-✨ Features
-
-1. AI Waste Recognition
-
-* Image-based waste identification.
-* Camera capture and image uploads.
-* Classification confidence scores.
-* Alternative classification predictions.
-* Human verification and correction of predictions.
-* Support for integrating custom machine-learning models.
-
-2. Waste Disposal Guide
-
-* Searchable material reference guide.
-* Recycling, compost, trash, and special-disposal categories.
-* Material preparation recommendations.
-* Customizable local disposal guidance.
-* Source information for locally verified disposal rules.
-
-3. Dataset Management
-
-* Collection of labeled waste images.
-* Human-verified classification corrections.
-* Dataset organization and auditing.
-* Duplicate image detection.
-* Training, validation, and testing dataset preparation.
-* Dataset export for machine-learning development.
-
-4. Model Development and Evaluation
-
-* Custom image classification training pipeline.
-* Model evaluation and comparison tools.
-* Classification accuracy and per-category performance analysis.
-* Confusion matrix reporting.
-* Real-world testing and feedback collection.
-
-5. User Feedback and Analytics
-
-* Classification history.
-* Prediction verification and corrections.
-* Model performance tracking.
-* Exportable feedback and evaluation data.
-* Classification statistics.
-
-⸻
-
-🧠 Machine Learning Approach
-
-WasteLens is being developed toward a dedicated waste-material recognition model.
-
-The development process is designed to include:
-
-1. Obtain appropriately licensed waste-image datasets.
-2. Standardize material categories and labels.
-3. Identify duplicates and inconsistent labels.
-4. Divide images into training, validation, and testing groups.
-5. Train a custom image classification model.
-6. Evaluate the model using unseen test data.
-7. Analyze errors across individual material categories.
-8. Integrate the trained model into the WasteLens application.
-
-Dataset Development
-
-One potential source is the RealWaste dataset, which contains 4,752 images across nine waste-material categories.
-
-Dataset inclusion requires reviewing its license, category definitions, and compatibility with the WasteLens classification system.
-
-The material categories will not automatically be treated as disposal categories. Local recycling rules must be considered separately.
-
-Model Evaluation
-
-Model performance will be assessed using:
-
-* Accuracy
-* Precision
-* Recall
-* F1-score
-* Confusion matrices
-* Per-category performance
-* Real-world testing results
-
-Important: A custom waste-specific model is still under development. General-purpose image recognition predictions should not be represented as a fully trained WasteLens model. No custom model accuracy is claimed until training and independent evaluation have been completed.
-
-⸻
-
-🛠️ Technology Stack
-
-Technology	Purpose
-React	Frontend interface
-Vite	Frontend development environment
-JavaScript	Application functionality
-Node.js	Backend runtime
-Express.js	Backend API
-TensorFlow.js	Browser-based machine learning integration
-Python	Machine-learning development
-TensorFlow	Custom model training
-IndexedDB	Local image dataset storage
-Local Storage	User preferences and local application data
-
-⸻
-
-🏗️ Project Architecture
-
-WasteLens is organized around four main components:
-
-WasteLens
-│
-├── Frontend
-│   ├── Image Recognition
-│   ├── Camera and Upload
-│   ├── Waste Guide
-│   ├── Dataset Management
-│   └── Analytics
-│
-├── Backend
-│   ├── API
-│   ├── Data Management
-│   └── Application Services
-│
-├── Machine Learning
-│   ├── Dataset Preparation
-│   ├── Model Training
-│   ├── Model Evaluation
-│   └── Model Integration
-│
-└── Documentation
-    ├── Setup Instructions
-    ├── Development Notes
-    └── Testing and Evaluation
-
-⸻
-
-🚀 Getting Started
-
-Prerequisites
-
-* Node.js
-* npm
-* Python for machine-learning development
-
-Installation
-
-Clone the repository:
-
-git clone https://github.com/dagmawi1-lang/WasteLens.git
-cd WasteLens
-
-The application source is organized inside the project directory. Navigate to the directory containing the frontend package.json before installing dependencies.
-
-Install dependencies:
-
+```bash
 npm install
-
-Start the development server using the script defined in that directory’s package.json.
-
 npm run dev
+```
 
-The terminal will display the local development URL.
+In another terminal:
 
-Note: Backend and machine-learning setup may require additional dependencies and environment configuration.
+```bash
+npm run server
+```
 
-⸻
+Then open the Vite URL shown in the terminal.
 
-🔐 Privacy and Data Handling
+## Important limitation
 
-WasteLens is being developed with user control and responsible data handling in mind.
+The first classifier uses a general-purpose MobileNet model, not a waste-specific trained model. WasteLens deliberately treats its result as a signal and provides verification instead of pretending that a generic model is always correct. A later version can replace the classifier with a waste-specific model and connect local municipal rules.
 
-Important considerations include:
+## Arbiter Hacks submission plan
 
-* User control over image collection.
-* Human consent before contributing images to a dataset.
-* Separating classification feedback from image storage.
-* Avoiding unnecessary collection of personal information.
-* Reviewing dataset permissions before redistribution.
+The 2–3 minute demo should show:
 
-⸻
+1. Upload a real waste item.
+2. Model prediction and confidence.
+3. Disposal recommendation and preparation guidance.
+4. A low-confidence/manual correction flow.
+5. Camera mode.
+6. History and analytics.
+7. Explain the next step: local rules + contamination intelligence.
 
-🌱 Environmental Impact
 
-WasteLens aims to contribute to better waste management by making material identification and disposal information easier to access.
+## V4: Custom local recycling profiles
 
-Potential impact will be evaluated through measurable indicators:
+The Waste Guide now supports General Guidance, a clearly labeled Virginia demonstration profile, and a Custom Local Profile. In the custom profile, users can name their waste program and set the disposal stream for each included guide item. These choices persist in the browser using localStorage. The interface clearly states that custom entries are user-entered and must be checked against official municipal or hauler guidance. The Virginia profile is a demonstration, not an official statewide rules database.
 
-Metric	What it measures
-Classification accuracy	How often material predictions are correct
-Correction rate	How frequently users correct predictions
-Per-category F1-score	Classification performance across materials
-Contamination reduction	Changes in incorrectly sorted materials
-Dataset diversity	Representation of different materials and conditions
-Guidance reliability	Accuracy of disposal recommendations against local sources
+This feature is a local rules configuration layer, not a live municipal lookup service. No location is collected or transmitted.
 
-These measurements will help determine whether WasteLens provides meaningful improvements rather than relying on estimated environmental benefits.
+## V6: human-correction feedback export
 
-⸻
+Human verification now creates a local correction record containing the model's predicted label/category, the corrected disposal category, confidence, source, and timestamp. Records are stored in the browser and can be exported as JSON or CSV for review and dataset planning. The user can inspect recent corrections or clear the local log.
 
-🗺️ Development Roadmap
+**Important:** V6 does not train a new vision model and does not save photos. These records are structured metadata useful for auditing classification errors and designing a future waste-specific dataset. Training a visual classifier would require a separately consented, representative image dataset with verified labels, data-quality checks, and an actual model-training pipeline.
 
-* [x]	Initial application concept and architecture
-* [x]	Image recognition interface
-* [x]	Waste disposal reference guide
-* [x]	Customizable disposal guidance
-* [x]	Human classification verification
-* [x]	Dataset management tools
-* [x]	Model training and evaluation infrastructure
-* [ ]	Complete licensed training dataset collection
-* [ ]	Train and evaluate a custom waste-specific model
-* [ ]	Integrate the trained model into the application
-* [ ]	Conduct broader real-world testing
-* [ ]	Improve recognition across different lighting and backgrounds
-* [ ]	Expand verified local disposal guidance
-* [ ]	Measure real-world environmental impact
 
-⸻
+## V7: consent-based image dataset curation
 
-⚠️ Limitations
+V7 adds a local dataset-curation workflow. A user selects an image, chooses a human-provided disposal label, checks an explicit permission/privacy consent box, and saves the sample in browser IndexedDB. Samples can be deleted individually or exported as a JSON file containing image data and labels. No images are uploaded to the backend. Exported dataset files should be treated as private because they contain the actual images.
 
-WasteLens is an active development project.
+The labels are user-provided and are not independently verified ground truth. The feature does not train a model. Before training, review labels, remove duplicates, ensure representative coverage across materials and lighting conditions, and create leakage-resistant train/validation/test splits.
 
-* Image classification predictions may be incorrect.
-* Confidence scores do not guarantee correctness.
-* Material recognition does not independently establish local recyclability.
-* Disposal recommendations depend on the accuracy and currency of local guidance.
-* The custom waste-specific model requires completed training and independent evaluation before its performance can be established.
 
-Users should verify important disposal decisions with their local waste-management authority.
+## V8 dataset quality audit
 
-⸻
+The dataset audit summarizes category counts, category coverage, exact duplicate image records, and a simple smallest-to-largest class balance ratio. It can export a JSON audit report. Duplicate detection is exact-match only and cannot identify visually similar images. The audit does not verify labels or train a model.
 
-🤝 Contributing
 
-Contributions and suggestions are welcome.
+## V10: Local model training starter
+The Dataset Preparation area can export a local training kit: a JSON file containing labeled images and train/validation/test assignments, a Python TensorFlow/Keras MobileNetV2 training script, and a setup README. Training runs on the user's computer, not in the browser. See `WASTELENS_TRAINING_README.md` generated by the app. The current split is image-level and should be replaced with object/session-grouped splitting before serious evaluation.
 
-Potential areas for improvement include:
 
-* Waste-image datasets.
-* Computer vision and machine learning.
-* Classification accuracy.
-* Local recycling information.
-* User interface improvements.
-* Environmental impact measurement.
+## V12 Model Comparison Center
+Import multiple `wastelens_evaluation.json` reports in the Model Comparison Center to review test accuracy, macro F1, test loss, and test sample count side by side. Reports are stored locally in this browser. You can export the comparison bundle as JSON. The displayed metric leader is descriptive only; reports are fairly comparable only when they use the same untouched test dataset, identical class definitions, and the same evaluation process. WasteLens cannot verify those conditions from the current report format.
 
-Before contributing third-party images or datasets, ensure that their licenses permit the intended use.
 
-⸻
+## V13: Load a trained model in the live scanner
 
-📜 License
+The scanner can load a TensorFlow.js **LayersModel** exported as `model.json` plus its `.bin` weight shard(s). After training, install the converter with `python -m pip install tensorflowjs`, then run:
 
-This project is licensed under the MIT License.
+```bash
+tensorflowjs_converter --input_format=keras wastelens_mobilenetv2.keras wastelens_tfjs_model
+```
 
-See the LICENSE file for details.
+In the V13 Live WasteLens Model panel, choose `model.json` and every weight shard referenced by it in the same file selection. The model must accept RGB input at 224 × 224 × 3 and output four softmax scores ordered exactly `recycle`, `compost`, `trash`, `special`. The included training script uses that class order and the model includes its own MobileNetV2 preprocessing layer.
 
-Third-party datasets, images, and dependencies may have separate licensing requirements.
+The custom model runs in the browser. It replaces the generic MobileNet guess while loaded; use the button to switch back. A score below 40% is marked for verification. The output is a disposal-category prediction, not a verified material identification or a statement about local collection rules.
 
-⸻
 
-👨‍💻 Project Information
+## V14: Real-world field testing
 
-Project: WasteLens
-Category: Environmental Technology / Artificial Intelligence / Computer Vision
-Status: Active Development
-Repository: github.com/dagmawi1-lang/WasteLens
+The Field Testing Center records model-based scan metadata locally in the browser. Each scan is logged with model source, predicted category, confidence, and timestamp. When a user verifies the result, the record is marked as confirmed or corrected. The dashboard reports counts and a correction rate using only manually verified samples, grouped by model source.
 
-⸻
+Export the field report as JSON or CSV for analysis. Records do not contain photos. They remain in browser local storage unless exported. Clearing browser site data may remove them.
 
-<p align="center">
+**Interpretation warning:** This is observational feedback, not a controlled benchmark. User-selected examples may be biased, small, or incorrectly verified. Unverified predictions are excluded from the correction rate. Do not claim this metric is model accuracy or compare models unless the same representative items, ground-truth labels, and testing procedure were used.
 
-WasteLens
+## V15: Stability and automated checks
 
-Recognize materials. Improve decisions. Reduce waste.
+V15 adds defensive browser-storage helpers so malformed or blocked localStorage does not crash startup or persistence effects. It adds an application-level React error boundary, image type/size checks, camera readiness checks, camera stream cleanup, preview object-URL cleanup, safer dataset image input limits, and a guard against incrementing the verified counter repeatedly for the same result.
 
-</p>
+Run the dependency-free checks with:
+
+```bash
+npm test
+npm run check
+```
+
+The test suite covers JSON parsing, blocked storage, quota errors, and text/JSON storage behavior. `npm run build` still requires installing the dependencies listed in `package.json`.
+
+## V16: Leakage-aware group splitting
+
+The dataset builder now accepts an optional **Object / capture-session group ID**. Assign the same ID to every photo of the same physical item or capture session. Existing saved samples can also have their group ID edited in the sample list. The deterministic split assigns each unique group to exactly one of train, validation, or test, so correctly grouped photos cannot cross split boundaries.
+
+The split exporter includes each sample's group ID, the number of unique groups, and group counts by category. With fewer than three unique groups, all samples remain in training rather than fabricating a validation/test set. Group-aware splitting does not automatically detect that two differently named groups depict the same object, and it does not guarantee class balance. The user must assign group IDs consistently and collect enough independent groups in every category.
+
+## V17: Group-aware, class-stratified model training
+
+The training kit now includes a standalone `training/train_wastelens.py` source script and a stronger generated script. It verifies that group IDs do not cross splits and that every group has a consistent label. The splitter stratifies independent groups within each category where possible, so categories with at least three groups receive training, validation, and test examples. The UI requires at least three independent groups in each of the four categories and no group-label conflicts before exporting the four-class training kit.
+
+The model training pipeline now:
+- requires training examples for all four classes;
+- applies class weights based on the training split;
+- uses early stopping and learning-rate reduction based on validation loss;
+- records the training history;
+- avoids double-applying MobileNetV2 preprocessing (preprocessing is included once in the model graph);
+- records group counts and split provenance in the evaluation report;
+- warns when validation or test splits lack a category.
+
+Run the generated training script locally after installing its Python dependencies. Training itself has not been executed in this environment because TensorFlow and the full Python ML dependencies are not installed.
+
+## V18: Larger image collection and stronger recognition training
+
+The dataset builder now supports consent-based bulk collection of up to 10 images at once (5 MB per image). The browser verifies that each file can be decoded and is at least 96 × 96 pixels. Saved records include dimensions, MIME type, file size, filename, category, and object/session group ID. The audit highlights known samples below 224 pixels on either side. Batch images use unique group IDs by default; enter a shared group ID only when the images depict the same physical object or capture session.
+
+The training pipeline now verifies image bytes with Pillow, normalizes decoded images to RGB JPEG, adds modest training-only augmentation, and optionally fine-tunes the final MobileNetV2 layers after training the classifier head. It records head-training and fine-tuning history and requires a 224 × 224 input so the model remains compatible with the browser scanner. These changes improve data handling and the training process but do not guarantee higher accuracy; real improvement must be measured on a representative untouched test set.
+
+The actual TensorFlow training run was not performed in this environment. Install the listed Python dependencies and run the exported training script locally.
+
+## V19: Real-world pilot testing and feedback analysis
+
+The Field Testing Center now records self-reported lighting, background, viewing angle, distance, and whether the scan came from upload or camera. The pilot dashboard breaks down reviewed outcomes by model, corrected category, test condition, and confidence band. JSON and CSV exports include the context fields.
+
+For a useful pilot, test the same physical items with each model, change one condition at a time, and have someone verify the actual item category rather than simply accepting the model output. Keep a record of how each item was verified. Condition groups with fewer than 10 reviewed examples are shown for exploration only, not as stable performance estimates.
+
+This remains an observational, user-selected pilot. Self-reported conditions are not sensor readings, and correction rate is not the same as unbiased benchmark accuracy. Results can be biased by item selection, reviewer mistakes, and small sample sizes. The app stores prediction metadata, not test photos, in the field-trial log.
+
+## V20: Source-backed local recycling rules
+
+The Custom Local Profile now has a source-backed rule ledger. For a guide item, users can record the selected disposal category, source title, HTTPS URL, authority type (municipality, hauler, state agency, regional authority, or other), date checked, and notes. Saving requires an explicit confirmation that the user reviewed the source and that it applies to the selected program. A saved source-backed rule takes precedence over a freeform local override for that guide item. The local rulebook can be exported as JSON.
+
+Source citations are user-entered. WasteLens does not fetch, authenticate, or independently verify the source, determine the user's municipality, or guarantee that the cited rule applies to a specific address. A source is marked as needing rechecking after 180 days. The rule remains visible but is clearly marked stale. Only HTTPS source links are accepted.
+
+## V21: Optional accounts and cloud sync
+
+V21 adds an optional username/password account flow and explicit cloud synchronization. Accounts use a salted scrypt password hash, opaque HttpOnly/SameSite cookies, a seven-day in-memory session, same-origin checks, and per-IP account attempt limiting. Usernames are 3–24 characters; passwords must be 12–128 characters. There is no email collection or password-reset flow.
+
+Users choose whether to load the cloud copy onto a device or upload that device's metadata. Sync uses revision checks to prevent silent stale overwrites. It includes history, settings, source-backed local rules, field-trial metadata, correction feedback, and model reports. It excludes the local image dataset and all image data. The server rejects image-data fields and payloads larger than 300 KB.
+
+The API is self-hosted and is not deployed by this project. Sessions are held in server memory and are invalidated by a server restart. See `DEPLOYMENT.md` for local startup instructions and the production hardening checklist. Do not treat this starter as a production-ready cloud service.
+
+## V22: Deployment, offline shell, security, and performance
+
+V22 adds an installable PWA manifest and a service worker. The worker caches the application shell and hashed static assets for repeat visits, uses a network-first navigation strategy with an offline fallback, and deliberately does not cache API/auth/sync requests or non-GET requests. The first visit still requires network access, and the general MobileNet model may need internet access to download its model files. The offline shell does not guarantee offline model inference.
+
+The server now serves the compiled Vite frontend in production, applies a Content Security Policy and additional browser security headers, assigns request IDs, limits API traffic, returns structured API errors, and keeps atomic data-file writes with a previous-file backup. The package separates Express runtime dependencies from frontend/build dependencies.
+
+A multi-stage `Dockerfile`, `docker-compose.yml`, and `.dockerignore` are included. To build and run locally with Docker:
+
+```bash
+docker compose up --build
+```
+
+Open `http://localhost:3001`. The Compose file creates a persistent volume for `server/data`. For public hosting, use HTTPS and complete the hardening checklist in `DEPLOYMENT.md`.
+
+## V23: Competition demo and submission preparation
+
+V23 adds an in-app competition demo checklist, a timed 2 minute 30 second demo script, an Arbiter Hacks submission draft, a release checklist, and a GitHub Actions workflow. The written submission materials describe the waste problem, how WasteLens was built, the proposed impact measures, and current limitations without claiming environmental impact or model accuracy that has not been demonstrated.
+
+Before recording or submitting, run `npm run check` and `npm run build`, test the actual app in a browser, and only show custom-model or field-testing results that you have personally produced and can explain. See `DEMO_SCRIPT.md`, `SUBMISSION.md`, and `RELEASE_CHECKLIST.md`.
+
+
+## V25: build fix and judge-friendly layout
+Fixed a template-string bug that broke `npm run build`, reordered the page so the sorting workflow comes first and the model and data tools sit in a labeled "Model & data lab", added header navigation, and labeled the hero card as an example. See `V25_TEST_REPORT.md` and `RUN_ON_YOUR_COMPUTER.md`.
+
+## License
+
+[MIT](LICENSE) © 2026 Dagmawi Melaku
+
+## Earlier versions
+
+Previous uploads of this project are kept unchanged in [`archive/`](archive/).
