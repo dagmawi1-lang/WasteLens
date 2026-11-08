@@ -1,6 +1,6 @@
-# WasteLens account and sync deployment notes
+# Deployment
 
-V21 provides an optional self-hosted account and sync API. It is not deployed by this repository and should not be exposed publicly until the production checklist below is completed.
+WasteLens includes an optional self-hosted account and sync API. Complete the production checklist below before exposing it publicly.
 
 ## Local development
 
@@ -44,7 +44,7 @@ Sync is explicit. Users choose either **Load cloud copy to this device** or **Up
 
 This is a development-grade starting point, not a security audit or production hosting certification.
 
-## V22 container deployment
+## Container deployment
 
 Build and start the app with Docker Compose:
 

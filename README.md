@@ -1,6 +1,8 @@
 # WasteLens
 
-WasteLens is a hackathon project for Arbiter Hacks V1's **Rethinking Waste** track. It uses browser-based computer vision, disposal reasoning, user verification, and a lightweight backend to help people make better waste-sorting decisions.
+**Point, scan, sort.** WasteLens is a waste-sorting assistant that runs computer vision in the browser, maps what it sees to a disposal stream (recycle, compost, trash, or special handling), explains how to prepare the item, and asks a person to confirm when it isn't sure.
+
+Built for the **Rethinking Waste** track of [Arbiter Hacks V1](https://arbiter-hacks-v1.devpost.com/).
 
 ## My role & contributions
 
@@ -9,199 +11,83 @@ WasteLens is a hackathon project for Arbiter Hacks V1's **Rethinking Waste** tra
 - Defined the problem, the waste categories, and the human-correction flow
 - Set up the dataset and training pipeline, and fixed a build-breaking bug before submission
 
-## Why it fits the theme
+## Features
 
-The primary purpose is waste sorting. The app analyzes an item, maps likely objects to disposal streams, explains preparation guidance, flags uncertainty, and lets a person correct the recommendation.
+**Scanner**
+- Upload a photo or use the camera. Images are checked for type, size, and dimensions before analysis.
+- Runs TensorFlow.js in the browser, using MobileNet by default or a custom-trained WasteLens model.
+- Shows a disposal recommendation with preparation tips and a confidence score. Results below 40% confidence are flagged for review.
+- Lets you correct a result. Corrections are logged locally and can be exported as JSON or CSV.
 
-## Current architecture
+**Local rules**
+- General guidance, a demonstration regional profile, and a custom profile for your own waste program.
+- A source-backed rule ledger: each rule records its source URL, authority type, and the date it was checked. Rules older than 180 days are marked for rechecking.
 
-- React + Vite frontend
-- TensorFlow.js + MobileNet browser vision model
-- Node + Express API
-- Local JSON development datastore
-- Browser local history
-- Camera capture support
-- Confidence + human verification flow
-- Security headers and input validation
+**Model & data lab**
+- Consent-based image collection stored in the browser (IndexedDB), with a dataset audit for class balance, duplicates, and low-resolution images.
+- Leakage-aware train/validation/test splits: photos of the same object or capture session always stay in the same split.
+- Exports a training kit, imports trained models, and compares evaluation reports side by side.
+- Field testing records lighting, background, angle, and distance, and breaks down correction rates by condition and confidence band.
 
-## Run locally
+**Platform**
+- Optional accounts with scrypt-hashed passwords, HttpOnly SameSite cookies, and rate limiting.
+- Explicit cloud sync with revision checks. Sync never includes images.
+- Installable PWA with an offline app shell.
+- Content Security Policy, request IDs, structured API errors, and atomic data writes.
+- Docker and GitHub Actions CI.
+
+## Tech stack
+
+React · Vite · TensorFlow.js · Node.js · Express · Python (TensorFlow/Keras and PyTorch training pipelines) · Docker
+
+## Getting started
+
+Requires Node.js 20 or newer.
 
 ```bash
 npm install
-npm run dev
+npm run dev        # frontend (Vite)
+npm run server     # API on http://localhost:3001 (second terminal)
 ```
 
-In another terminal:
+Production-style run on one port:
 
 ```bash
-npm run server
+npm run build
+npm start          # serves dist/ and the API on http://localhost:3001
 ```
 
-Then open the Vite URL shown in the terminal.
-
-## Important limitation
-
-The first classifier uses a general-purpose MobileNet model, not a waste-specific trained model. WasteLens deliberately treats its result as a signal and provides verification instead of pretending that a generic model is always correct. A later version can replace the classifier with a waste-specific model and connect local municipal rules.
-
-## Arbiter Hacks submission plan
-
-The 2–3 minute demo should show:
-
-1. Upload a real waste item.
-2. Model prediction and confidence.
-3. Disposal recommendation and preparation guidance.
-4. A low-confidence/manual correction flow.
-5. Camera mode.
-6. History and analytics.
-7. Explain the next step: local rules + contamination intelligence.
-
-
-## V4: Custom local recycling profiles
-
-The Waste Guide now supports General Guidance, a clearly labeled Virginia demonstration profile, and a Custom Local Profile. In the custom profile, users can name their waste program and set the disposal stream for each included guide item. These choices persist in the browser using localStorage. The interface clearly states that custom entries are user-entered and must be checked against official municipal or hauler guidance. The Virginia profile is a demonstration, not an official statewide rules database.
-
-This feature is a local rules configuration layer, not a live municipal lookup service. No location is collected or transmitted.
-
-## V6: human-correction feedback export
-
-Human verification now creates a local correction record containing the model's predicted label/category, the corrected disposal category, confidence, source, and timestamp. Records are stored in the browser and can be exported as JSON or CSV for review and dataset planning. The user can inspect recent corrections or clear the local log.
-
-**Important:** V6 does not train a new vision model and does not save photos. These records are structured metadata useful for auditing classification errors and designing a future waste-specific dataset. Training a visual classifier would require a separately consented, representative image dataset with verified labels, data-quality checks, and an actual model-training pipeline.
-
-
-## V7: consent-based image dataset curation
-
-V7 adds a local dataset-curation workflow. A user selects an image, chooses a human-provided disposal label, checks an explicit permission/privacy consent box, and saves the sample in browser IndexedDB. Samples can be deleted individually or exported as a JSON file containing image data and labels. No images are uploaded to the backend. Exported dataset files should be treated as private because they contain the actual images.
-
-The labels are user-provided and are not independently verified ground truth. The feature does not train a model. Before training, review labels, remove duplicates, ensure representative coverage across materials and lighting conditions, and create leakage-resistant train/validation/test splits.
-
-
-## V8 dataset quality audit
-
-The dataset audit summarizes category counts, category coverage, exact duplicate image records, and a simple smallest-to-largest class balance ratio. It can export a JSON audit report. Duplicate detection is exact-match only and cannot identify visually similar images. The audit does not verify labels or train a model.
-
-
-## V10: Local model training starter
-The Dataset Preparation area can export a local training kit: a JSON file containing labeled images and train/validation/test assignments, a Python TensorFlow/Keras MobileNetV2 training script, and a setup README. Training runs on the user's computer, not in the browser. See `WASTELENS_TRAINING_README.md` generated by the app. The current split is image-level and should be replaced with object/session-grouped splitting before serious evaluation.
-
-
-## V12 Model Comparison Center
-Import multiple `wastelens_evaluation.json` reports in the Model Comparison Center to review test accuracy, macro F1, test loss, and test sample count side by side. Reports are stored locally in this browser. You can export the comparison bundle as JSON. The displayed metric leader is descriptive only; reports are fairly comparable only when they use the same untouched test dataset, identical class definitions, and the same evaluation process. WasteLens cannot verify those conditions from the current report format.
-
-
-## V13: Load a trained model in the live scanner
-
-The scanner can load a TensorFlow.js **LayersModel** exported as `model.json` plus its `.bin` weight shard(s). After training, install the converter with `python -m pip install tensorflowjs`, then run:
-
-```bash
-tensorflowjs_converter --input_format=keras wastelens_mobilenetv2.keras wastelens_tfjs_model
-```
-
-In the V13 Live WasteLens Model panel, choose `model.json` and every weight shard referenced by it in the same file selection. The model must accept RGB input at 224 × 224 × 3 and output four softmax scores ordered exactly `recycle`, `compost`, `trash`, `special`. The included training script uses that class order and the model includes its own MobileNetV2 preprocessing layer.
-
-The custom model runs in the browser. It replaces the generic MobileNet guess while loaded; use the button to switch back. A score below 40% is marked for verification. The output is a disposal-category prediction, not a verified material identification or a statement about local collection rules.
-
-
-## V14: Real-world field testing
-
-The Field Testing Center records model-based scan metadata locally in the browser. Each scan is logged with model source, predicted category, confidence, and timestamp. When a user verifies the result, the record is marked as confirmed or corrected. The dashboard reports counts and a correction rate using only manually verified samples, grouped by model source.
-
-Export the field report as JSON or CSV for analysis. Records do not contain photos. They remain in browser local storage unless exported. Clearing browser site data may remove them.
-
-**Interpretation warning:** This is observational feedback, not a controlled benchmark. User-selected examples may be biased, small, or incorrectly verified. Unverified predictions are excluded from the correction rate. Do not claim this metric is model accuracy or compare models unless the same representative items, ground-truth labels, and testing procedure were used.
-
-## V15: Stability and automated checks
-
-V15 adds defensive browser-storage helpers so malformed or blocked localStorage does not crash startup or persistence effects. It adds an application-level React error boundary, image type/size checks, camera readiness checks, camera stream cleanup, preview object-URL cleanup, safer dataset image input limits, and a guard against incrementing the verified counter repeatedly for the same result.
-
-Run the dependency-free checks with:
-
-```bash
-npm test
-npm run check
-```
-
-The test suite covers JSON parsing, blocked storage, quota errors, and text/JSON storage behavior. `npm run build` still requires installing the dependencies listed in `package.json`.
-
-## V16: Leakage-aware group splitting
-
-The dataset builder now accepts an optional **Object / capture-session group ID**. Assign the same ID to every photo of the same physical item or capture session. Existing saved samples can also have their group ID edited in the sample list. The deterministic split assigns each unique group to exactly one of train, validation, or test, so correctly grouped photos cannot cross split boundaries.
-
-The split exporter includes each sample's group ID, the number of unique groups, and group counts by category. With fewer than three unique groups, all samples remain in training rather than fabricating a validation/test set. Group-aware splitting does not automatically detect that two differently named groups depict the same object, and it does not guarantee class balance. The user must assign group IDs consistently and collect enough independent groups in every category.
-
-## V17: Group-aware, class-stratified model training
-
-The training kit now includes a standalone `training/train_wastelens.py` source script and a stronger generated script. It verifies that group IDs do not cross splits and that every group has a consistent label. The splitter stratifies independent groups within each category where possible, so categories with at least three groups receive training, validation, and test examples. The UI requires at least three independent groups in each of the four categories and no group-label conflicts before exporting the four-class training kit.
-
-The model training pipeline now:
-- requires training examples for all four classes;
-- applies class weights based on the training split;
-- uses early stopping and learning-rate reduction based on validation loss;
-- records the training history;
-- avoids double-applying MobileNetV2 preprocessing (preprocessing is included once in the model graph);
-- records group counts and split provenance in the evaluation report;
-- warns when validation or test splits lack a category.
-
-Run the generated training script locally after installing its Python dependencies. Training itself has not been executed in this environment because TensorFlow and the full Python ML dependencies are not installed.
-
-## V18: Larger image collection and stronger recognition training
-
-The dataset builder now supports consent-based bulk collection of up to 10 images at once (5 MB per image). The browser verifies that each file can be decoded and is at least 96 × 96 pixels. Saved records include dimensions, MIME type, file size, filename, category, and object/session group ID. The audit highlights known samples below 224 pixels on either side. Batch images use unique group IDs by default; enter a shared group ID only when the images depict the same physical object or capture session.
-
-The training pipeline now verifies image bytes with Pillow, normalizes decoded images to RGB JPEG, adds modest training-only augmentation, and optionally fine-tunes the final MobileNetV2 layers after training the classifier head. It records head-training and fine-tuning history and requires a 224 × 224 input so the model remains compatible with the browser scanner. These changes improve data handling and the training process but do not guarantee higher accuracy; real improvement must be measured on a representative untouched test set.
-
-The actual TensorFlow training run was not performed in this environment. Install the listed Python dependencies and run the exported training script locally.
-
-## V19: Real-world pilot testing and feedback analysis
-
-The Field Testing Center now records self-reported lighting, background, viewing angle, distance, and whether the scan came from upload or camera. The pilot dashboard breaks down reviewed outcomes by model, corrected category, test condition, and confidence band. JSON and CSV exports include the context fields.
-
-For a useful pilot, test the same physical items with each model, change one condition at a time, and have someone verify the actual item category rather than simply accepting the model output. Keep a record of how each item was verified. Condition groups with fewer than 10 reviewed examples are shown for exploration only, not as stable performance estimates.
-
-This remains an observational, user-selected pilot. Self-reported conditions are not sensor readings, and correction rate is not the same as unbiased benchmark accuracy. Results can be biased by item selection, reviewer mistakes, and small sample sizes. The app stores prediction metadata, not test photos, in the field-trial log.
-
-## V20: Source-backed local recycling rules
-
-The Custom Local Profile now has a source-backed rule ledger. For a guide item, users can record the selected disposal category, source title, HTTPS URL, authority type (municipality, hauler, state agency, regional authority, or other), date checked, and notes. Saving requires an explicit confirmation that the user reviewed the source and that it applies to the selected program. A saved source-backed rule takes precedence over a freeform local override for that guide item. The local rulebook can be exported as JSON.
-
-Source citations are user-entered. WasteLens does not fetch, authenticate, or independently verify the source, determine the user's municipality, or guarantee that the cited rule applies to a specific address. A source is marked as needing rechecking after 180 days. The rule remains visible but is clearly marked stale. Only HTTPS source links are accepted.
-
-## V21: Optional accounts and cloud sync
-
-V21 adds an optional username/password account flow and explicit cloud synchronization. Accounts use a salted scrypt password hash, opaque HttpOnly/SameSite cookies, a seven-day in-memory session, same-origin checks, and per-IP account attempt limiting. Usernames are 3–24 characters; passwords must be 12–128 characters. There is no email collection or password-reset flow.
-
-Users choose whether to load the cloud copy onto a device or upload that device's metadata. Sync uses revision checks to prevent silent stale overwrites. It includes history, settings, source-backed local rules, field-trial metadata, correction feedback, and model reports. It excludes the local image dataset and all image data. The server rejects image-data fields and payloads larger than 300 KB.
-
-The API is self-hosted and is not deployed by this project. Sessions are held in server memory and are invalidated by a server restart. See `DEPLOYMENT.md` for local startup instructions and the production hardening checklist. Do not treat this starter as a production-ready cloud service.
-
-## V22: Deployment, offline shell, security, and performance
-
-V22 adds an installable PWA manifest and a service worker. The worker caches the application shell and hashed static assets for repeat visits, uses a network-first navigation strategy with an offline fallback, and deliberately does not cache API/auth/sync requests or non-GET requests. The first visit still requires network access, and the general MobileNet model may need internet access to download its model files. The offline shell does not guarantee offline model inference.
-
-The server now serves the compiled Vite frontend in production, applies a Content Security Policy and additional browser security headers, assigns request IDs, limits API traffic, returns structured API errors, and keeps atomic data-file writes with a previous-file backup. The package separates Express runtime dependencies from frontend/build dependencies.
-
-A multi-stage `Dockerfile`, `docker-compose.yml`, and `.dockerignore` are included. To build and run locally with Docker:
+Or with Docker:
 
 ```bash
 docker compose up --build
 ```
 
-Open `http://localhost:3001`. The Compose file creates a persistent volume for `server/data`. For public hosting, use HTTPS and complete the hardening checklist in `DEPLOYMENT.md`.
+The camera needs `localhost` or HTTPS.
 
-## V23: Competition demo and submission preparation
+## Testing
 
-V23 adds an in-app competition demo checklist, a timed 2 minute 30 second demo script, an Arbiter Hacks submission draft, a release checklist, and a GitHub Actions workflow. The written submission materials describe the waste problem, how WasteLens was built, the proposed impact measures, and current limitations without claiming environmental impact or model accuracy that has not been demonstrated.
+```bash
+npm run check      # syntax checks plus the automated test suite
+```
 
-Before recording or submitting, run `npm run check` and `npm run build`, test the actual app in a browser, and only show custom-model or field-testing results that you have personally produced and can explain. See `DEMO_SCRIPT.md`, `SUBMISSION.md`, and `RELEASE_CHECKLIST.md`.
+## Training a waste-specific model
 
+WasteLens includes two training pipelines that run on your own machine:
 
-## V25: build fix and judge-friendly layout
-Fixed a template-string bug that broke `npm run build`, reordered the page so the sorting workflow comes first and the model and data tools sit in a labeled "Model & data lab", added header navigation, and labeled the hero card as an example. See `V25_TEST_REPORT.md` and `RUN_ON_YOUR_COMPUTER.md`.
+- [`training/README.md`](training/README.md): a four-class disposal model trained on images collected in the app, with group-aware stratified splits, class weights, early stopping, and optional fine-tuning.
+- [`training/README_REALWASTE.md`](training/README_REALWASTE.md): a nine-class material-recognition model trained on the [RealWaste dataset](https://doi.org/10.24432/C5SS4G) (Single, Iranmanesh & Raad, 2023).
+
+A trained Keras model can be converted for the browser with `tensorflowjs_converter` and loaded from the scanner's model panel. The model must take 224 × 224 RGB input and output four scores in this order: `recycle`, `compost`, `trash`, `special`.
+
+## Design notes
+
+- **Human in the loop.** The default MobileNet model is a general-purpose classifier, so WasteLens treats its output as a signal to confirm rather than a final answer.
+- **Local rules vary.** Recycling rules differ by city and hauler. Recommendations are guidance, and rules you enter should be checked against your local program.
+- **Privacy.** Photos stay in the browser unless you explicitly export them. No location is collected.
+
+See [`DEPLOYMENT.md`](DEPLOYMENT.md) for self-hosting and production hardening.
 
 ## License
 
 **Permission required.** © 2026 Dagmawi Melaku. You need my written permission before using, copying, or modifying this code, and any approved use must credit me with a link to this repository. Viewing, forking on GitHub, and running it to judge or review a submission are allowed without asking. To ask, [open an issue](../../issues/new). See [LICENSE](LICENSE) for the full terms.
-
-## Earlier versions
-
-Previous uploads of this project are kept unchanged in [`archive/`](archive/).

@@ -1,4 +1,4 @@
-# WasteLens V17 Training Pipeline
+# WasteLens training pipeline (four disposal classes)
 
 Install Python 3.10 or 3.11 dependencies:
 
@@ -14,4 +14,4 @@ python train_wastelens.py wastelens-training-dataset.json --epochs 8 --batch-siz
 
 The pipeline validates that a group ID does not appear in multiple splits, requires training examples for all four categories, uses class weights and early stopping, and writes model, history, confusion-matrix, and evaluation-report files. Image pixel preprocessing is included once inside the model graph.
 
-This is a starter research pipeline, not a validated production model. Label quality, group ID correctness, class coverage, and test-set independence remain the user's responsibility.
+This is a research pipeline; measure accuracy on an independent test set before relying on a model. Label quality, group ID correctness, class coverage, and test-set independence remain the user's responsibility.
