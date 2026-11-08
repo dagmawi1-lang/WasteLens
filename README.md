@@ -2,6 +2,13 @@
 
 WasteLens is a hackathon project for Arbiter Hacks V1's **Rethinking Waste** track. It uses browser-based computer vision, disposal reasoning, user verification, and a lightweight backend to help people make better waste-sorting decisions.
 
+## My role & contributions
+
+**Solo developer · AI-assisted**
+
+- Defined the problem, the waste categories, and the human-correction flow
+- Set up the dataset and training pipeline, and fixed a build-breaking bug before submission
+
 ## Why it fits the theme
 
 The primary purpose is waste sorting. The app analyzes an item, maps likely objects to disposal streams, explains preparation guidance, flags uncertainty, and lets a person correct the recommendation.
